@@ -87,27 +87,9 @@ WysiHat.Selection = Class.create((function() {
     else
       parent = range.commonAncestorContainer;
 
-    if (parent) {
-      while (parent.nodeType != 1) parent = parent.parentNode;
-      if (parent.nodeName.toLowerCase() != "body") {
-        el = parent;
-        do {
-          el = el.parentNode;
-          candidates[candidates.length] = el;
-        } while (el.nodeName.toLowerCase() != "body");
-      }
-      children = parent.all || parent.getElementsByTagName("*");
-      for (var j = 0; j < children.length; j++)
-        candidates[candidates.length] = children[j];
-      nodes = [parent];
-      for (var ii = 0, r2; ii < candidates.length; ii++) {
-        r2 = createRangeFromElement(this.document, candidates[ii]);
-        if (r2 && compareRanges(range, r2))
-          nodes[nodes.length] = candidates[ii];
-      }
-    }
+    while(parent && parent.nodeType != 1) parent = parent.parentNode;
 
-    return nodes.first();
+    return parent;
   }
 
   function createRangeFromElement(document, node) {
