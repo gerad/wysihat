@@ -183,6 +183,14 @@ WysiHat.Selection = Class.create((function() {
 
   function restoreRange() {
     if (savedRange) savedRange.select();
+    else {
+      // select the end if there's nothing saved
+      var childNodes = this.document.body.childNodes;
+      var node = childNodes.length ? childNodes[childNodes.length - 1] : this.document.body;
+      var range = createRangeFromElement(this.document, node);
+      range.collapse();
+      range.select();
+    }
   }
 
   return {
