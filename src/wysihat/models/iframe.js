@@ -84,11 +84,11 @@ WysiHat.iFrame.Methods = {
    *  line when you hit enter, not a new paragraph.
   **/
   setStyle: function(styles) {
-    var document = this.getDocument();
-
     var element = this;
     if (!this.ready)
       return setTimeout(function() { element.setStyle(styles); }, 1);
+
+    var document = this.getDocument();
 
     if (Prototype.Browser.IE) {
       var style = document.createStyleSheet();

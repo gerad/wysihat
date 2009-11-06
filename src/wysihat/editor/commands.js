@@ -140,10 +140,10 @@ WysiHat.Commands = (function() {
    * 
    * Returns the color of the selected portion
   **/
-   function colorSelected() {
-     var node = this.selection.getNode();
-     return standardizeColor(Element.getStyle(node, 'color'));
-   }
+  function colorSelected() {
+    var node = this.selection.getNode();
+    return standardizeColor(Element.getStyle(node, 'color'));
+  }
 
   /**
    *  WysiHat.Commands#backgroundColorSelection(color) -> undefined
@@ -196,6 +196,16 @@ WysiHat.Commands = (function() {
    *  Wraps the current selection in a link.
   **/
   function linkSelection(url) {
+
+    // createLink doesn't work on IE if there is no selection; workaround
+    if (Prototype.Browser.IE) {
+      this.selection.restore();
+      if (this.selection.getSelection().type === 'None') {
+        insertHTML.bind(this)(["<a href='", url, "'>",url,"</a>"].join(''));
+        return;
+      }
+    }
+
     this.execCommand('createLink', false, url);
   }
 
@@ -260,7 +270,8 @@ WysiHat.Commands = (function() {
   **/
   function insertHTML(html) {
     if (Prototype.Browser.IE) {
-      var range = this._selection.getRange();
+      this.selection.restore();
+      var range = this.selection.getRange();
       range.pasteHTML(html);
       range.collapse(false);
       range.select();
